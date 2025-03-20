@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Buttons with Name</title>
+    <!-- Link to Google Font (Lobster) -->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styling */
+        body {
+            font-family: 'Lobster', cursive;  /* Updated to a stylish Lobster font */
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #009688, #4caf50);
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Container for each page */
+        .container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            transition: transform 0.5s ease;
+        }
+
+        /* Header Styling */
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Input Field Styling */
+        input {
+            width: 80%;
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #4caf50;
+            outline: none;
+        }
+
+        /* Button Styling */
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Submit Button */
+        #submitBtn {
+            background-color: #000000;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        #submitBtn:hover {
+            background-color: #e61919;
+            transform: translateY(-3px);
+        }
+
+        /* Yes Button (Green) */
+        .yes-btn {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .yes-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* No Button (Red) */
+        .no-btn {
+            background-color: #e53935;
+            color: white;
+        }
+
+        .no-btn:hover {
+            background-color: #c62828;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Image Styling */
+        #image {
+            width: 45%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Message Styling */
+        .message {
+            font-size: 20px;
+            margin-top: 30px;
+            font-weight: bold;
+            color: #ffeb3b;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .message.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 12px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Name Input Page -->
+    <div class="container" id="nameInputPage">
+        <h1>Enter Your Name</h1>
+        <input type="text" id="nameInput" placeholder="Enter your name" />
+        <button id="submitBtn">Submit</button>
+    </div>
+
+    <!-- Main Page (Interactive Buttons) -->
+    <div class="container" id="mainPage" style="display:none;">
+        <h1 id="greeting">Click the "No" Button to Make the "Yes" Button Grow!</h1>
+        <img id="image" src="/images/animated-waiting.gif" alt="Placeholder Image">
+        <button class="no-btn" id="noButton">No</button>
+        <button class="yes-btn" id="yesButton">Yes</button>
+        <div id="message" class="message">You clicked the 'Yes' button!</div>
+    </div>
+
+    <script>
+        const submitBtn = document.getElementById('submitBtn');
+        const nameInput = document.getElementById('nameInput');
+        const nameInputPage = document.getElementById('nameInputPage');
+        const mainPage = document.getElementById('mainPage');
+        const greeting = document.getElementById('greeting');
+
+        submitBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                // Hide the name input page and show the main page with personalized greeting
+                nameInputPage.style.display = 'none';
+                mainPage.style.display = 'block';
+                greeting.textContent = `Hello, ${name}! Let's go for a date!!`;
+            } else {
+                alert("Please enter your name.");
+            }
+        });
+
+        // Main Page Button Actions
+        let clickCount = 0;
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        const messageDiv = document.getElementById('message');
+        const image = document.getElementById('image');
+
+        // Increase the size of "Yes" button when "No" is clicked
+        noButton.addEventListener('click', () => {
+            clickCount++;
+            yesButton.style.transform = `scale(${1 + clickCount * 0.3})`;
+        });
+
+        // Show a message and GIF when "Yes" is clicked
+        yesButton.addEventListener('click', () => {
+            greeting.textContent = `yaaayy!!! Thanks ${name}!`;
+            messageDiv.classList.add('show');
+
+            // Hide both the "No" and "Yes" buttons after clicking "Yes"
+            noButton.style.display = 'none';
+            yesButton.style.display = 'none';
+
+            // Remove the image after clicking "Yes"
+            image.style.display = 'none';
+
+            // Create and append a GIF after clicking "Yes"
+            const gif = document.createElement('img');
+            gif.src = '/images/hap.gif';  // Make sure the path is correct or use a URL
+            gif.alt = 'Celebration GIF';
+            gif.style.width = '80%';
+            gif.style.marginTop = '20px';
+            gif.style.borderRadius = '12px';
+            gif.style.maxWidth = '350px';
+
+            // Append the GIF to the main page
+            mainPage.appendChild(gif);
+        });
+    </script>
+
+</body>
+</html>
